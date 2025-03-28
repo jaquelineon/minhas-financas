@@ -20,6 +20,10 @@ public class Receita {
         this.descricao = descricao;
     }
 
+    public Double getValor() {
+        return valor;
+    }
+
     public void setValor(Double valor) {
         this.valor = valor;
     }

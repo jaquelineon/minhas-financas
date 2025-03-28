@@ -2,17 +2,31 @@ package com.viana.minhas_financas.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Conta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idConta;
+    @OneToOne
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
     private Double saldo;
     @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
-    private Receita receita;
+    private List<Receita> receita = new ArrayList<>();
     @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
-    private Despesa despesa;
+    private List<Despesa> despesa = new ArrayList<>();
+
+    public Conta(Usuario usuario, Double saldo) {
+        if (saldo <= 0) {
+            throw new IllegalArgumentException("Não é possível criar uma conta com saldo zerado" +
+                    "ou negativo, deposite um valor");
+        }
+        this.usuario = usuario;
+        this.saldo = saldo;
+    }
 
     public Long getId() {
         return idConta;
@@ -30,19 +44,19 @@ public class Conta {
         this.usuario = usuario;
     }
 
-    public Receita getReceita() {
+    public List<Receita> getReceita() {
         return receita;
     }
 
-    public void setReceita(Receita receita) {
+    public void setReceita(List<Receita> receita) {
         this.receita = receita;
     }
 
-    public Despesa getDespesa() {
+    public List<Despesa> getDespesa() {
         return despesa;
     }
 
-    public void setDespesa(Despesa despesa) {
+    public void setDespesa(List<Despesa> despesa) {
         this.despesa = despesa;
     }
 

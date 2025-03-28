@@ -1,9 +1,6 @@
 package com.viana.minhas_financas.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.time.LocalDate;
@@ -12,16 +9,18 @@ import java.time.LocalDate;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idUsuario;
     private String nome;
-    private LocalDate idade;
+    private LocalDate dataNascimento;
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private Conta conta;
 
-    public Long getId() {
-        return id;
+    public Long getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNome() {
@@ -32,11 +31,11 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public LocalDate getIdade() {
-        return idade;
+    public LocalDate getdataNascimento() {
+        return dataNascimento;
     }
 
-    public void setIdade(LocalDate idade) {
-        this.idade = idade;
+    public void setdataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 }

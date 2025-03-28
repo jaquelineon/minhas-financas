@@ -21,6 +21,14 @@ public class Despesa {
         this.descricao = descricao;
     }
 
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
     public Double getValor() {
         return valor;
     }
