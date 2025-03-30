@@ -1,7 +1,7 @@
 package com.viana.minhas_financas.model;
 
 import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.web.WebProperties;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -10,10 +10,27 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
+
+    @NotNull(message = "O nome é obrigatório.")
+    @Column(nullable = false)
     private String nome;
+
+    @NotNull(message = "A data de nascimento é obrigatória.")
+    @Column(nullable = false)
     private LocalDate dataNascimento;
+
+    @NotNull(message = "O e-mail não pode ser nulo.")
+    @Column(nullable = false)
+    private String email;
+    
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Conta conta;
+
+    public Usuario(String nome, LocalDate dataNascimento, String email) {
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.email = email;
+    }
 
     public Long getIdUsuario() {
         return idUsuario;
@@ -31,11 +48,27 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public LocalDate getdataNascimento() {
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setdataNascimento(LocalDate dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 }

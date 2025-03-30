@@ -1,13 +1,26 @@
 package com.viana.minhas_financas.model;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
+
+@Entity
 public class Receita {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReceita;
+
+    @NotNull(message = "O valor não pode ser nulo.")
+    @Column(nullable = false)
     private Double valor;
+
+    @NotNull(message = "É obrigatório escolher uma categoria.")
+    @Column(nullable = false)
     private Categoria categoria;
+
+    @NotNull(message = "A descrição não pode estar vazia.")
+    @Column(nullable = false)
     private String descricao;
 
     @ManyToOne
