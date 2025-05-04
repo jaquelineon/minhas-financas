@@ -1,39 +1,41 @@
 package com.viana.minhas_financas.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Conta {
+public class Carteira {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idConta;
-    @OneToOne
+    private Long idCarteira;
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_usuario")
+    @NotNull(message = "O campo usuario é obrigatório")
     private Usuario usuario;
     private Double saldo;
-    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "carteira", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Receita> receita = new ArrayList<>();
-    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "carteira", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Despesa> despesa = new ArrayList<>();
 
-    public Conta(Usuario usuario, Double saldo) {
-        if (saldo <= 0) {
-            throw new IllegalArgumentException("Não é possível criar uma conta com saldo zerado" +
-                    "ou negativo, deposite um valor");
-        }
+    public Carteira() {
+
+    }
+
+    public Carteira(Usuario usuario, Double saldo) {
         this.usuario = usuario;
         this.saldo = saldo;
     }
 
-    public Long getId() {
-        return idConta;
+    public Long getIdCarteira() {
+        return idCarteira;
     }
 
     public void setId(Long id) {
-        this.idConta = id;
+        this.idCarteira = id;
     }
 
     public Usuario getUsuario() {
@@ -67,5 +69,4 @@ public class Conta {
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
-
 }

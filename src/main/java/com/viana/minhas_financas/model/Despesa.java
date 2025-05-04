@@ -3,6 +3,7 @@ package com.viana.minhas_financas.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+@Entity
 public class Despesa {
 
     @Id
@@ -22,8 +23,8 @@ public class Despesa {
     private String descricao;
 
     @ManyToOne
-    @JoinColumn(name = "id_conta")
-    private Conta conta;
+    @JoinColumn(name = "id_carteira")
+    private Carteira carteira;
 
     public Despesa(Double valor, Categoria categoria, String descricao) {
         this.valor = valor;
@@ -31,12 +32,12 @@ public class Despesa {
         this.descricao = descricao;
     }
 
-    public Conta getConta() {
-        return conta;
+    public Carteira getCarteira() {
+        return carteira;
     }
 
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setCarteira(Carteira carteira) {
+        this.carteira = carteira;
     }
 
     public Double getValor() {

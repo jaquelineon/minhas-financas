@@ -23,8 +23,11 @@ public class Usuario {
     @Column(nullable = false)
     private String email;
     
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Conta conta;
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Carteira carteira;
+
+    public Usuario() {
+    }
 
     public Usuario(String nome, LocalDate dataNascimento, String email) {
         this.nome = nome;
@@ -48,12 +51,12 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public Conta getConta() {
-        return conta;
+    public Carteira getCarteira() {
+        return carteira;
     }
 
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setCarteira(Carteira carteira) {
+        this.carteira = carteira;
     }
 
     public String getEmail() {
