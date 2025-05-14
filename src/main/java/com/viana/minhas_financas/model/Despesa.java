@@ -3,6 +3,8 @@ package com.viana.minhas_financas.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
+
 @Entity
 public class Despesa {
 
@@ -10,9 +12,9 @@ public class Despesa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDespesa;
 
-    @NotNull(message = "O valor não pode ser nulo.")
+    @NotNull(message = "O valor da Despesa não pode ser nulo.")
     @Column(nullable = false)
-    private Double valor;
+    private BigDecimal valorDespesa;
 
     @NotNull(message = "É obrigatório escolher uma categoria.")
     @Column(nullable = false)
@@ -26,8 +28,8 @@ public class Despesa {
     @JoinColumn(name = "id_carteira")
     private Carteira carteira;
 
-    public Despesa(Double valor, Categoria categoria, String descricao) {
-        this.valor = valor;
+    public Despesa(BigDecimal valorDespesa, Categoria categoria, String descricao) {
+        this.valorDespesa = valorDespesa;
         this.categoria = categoria;
         this.descricao = descricao;
     }
@@ -40,12 +42,12 @@ public class Despesa {
         this.carteira = carteira;
     }
 
-    public Double getValor() {
-        return valor;
+    public BigDecimal getValorDespesa() {
+        return valorDespesa;
     }
 
-    public void setValor(Double valor) {
-        this.valor = valor;
+    public void setValorDespesa(BigDecimal valorDespesa) {
+        this.valorDespesa = valorDespesa;
     }
 
     public Categoria getCategoria() {

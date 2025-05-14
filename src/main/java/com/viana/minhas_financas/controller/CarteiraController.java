@@ -25,17 +25,17 @@ public class CarteiraController {
 
         CarteiraResponseDTO response = new CarteiraResponseDTO();
         response.setIdCarteira(carteira.getIdCarteira());
-        response.setSaldo(carteira.getSaldo());
+        response.setSaldoCarteira(carteira.getSaldoCarteira());
         response.setNomeUsuario(carteira.getUsuario().getNome());
         response.setEmailUsuario(carteira.getUsuario().getEmail());
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    public List<Carteira> listarCarteiras () {
-        return carteiraService.listarCarteiras();
-    }
+        @GetMapping
+        public ResponseEntity<List<CarteiraResponseDTO>> listarCarteiras() {
+            return ResponseEntity.ok(carteiraService.listarCarteiras());
+        }
 
     @PutMapping("/{id}/receita")
     public Carteira adicionarReceita(@PathVariable Long idCarteira, @RequestBody Receita receita) {

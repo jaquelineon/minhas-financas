@@ -1,12 +1,14 @@
 package com.viana.minhas_financas.service;
 
 import com.viana.minhas_financas.dto.CarteiraRequestDTO;
+import com.viana.minhas_financas.dto.CarteiraResponseDTO;
 import com.viana.minhas_financas.model.*;
 import com.viana.minhas_financas.repository.CarteiraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CarteiraService {
@@ -27,15 +29,22 @@ public class CarteiraService {
         return carteiraRepository.save(carteira);
     }
 
-    public List<Carteira> listarCarteiras () {
-        return carteiraRepository.findAll();
+    public List<CarteiraResponseDTO> listarCarteiras () {
+        List<Carteira> carteiras = carteiraRepository.findAll();
+        return carteiras.stream().map(c -> {
+            CarteiraResponseDTO dto = new CarteiraResponseDTO();
+            dto.setIdCarteira(c.getIdCarteira());
+            dto.setNomeUsuario(c.getUsuario().getNome());
+            dto.setEmailUsuario(c.getUsuario().getEmail());
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     public Carteira adicionarReceita(Long idCarteira, Receita receita) {
         Carteira carteira = obterCarteira(idCarteira);
         receita.setCarteira(carteira);
         carteira.getReceita().add(receita);
-        carteira.setSaldo(carteira.getSaldo() + receita.getValor());
+        carteira.setSaldoCarteira(carteira.getSaldoCarteira().add(receita.getValorReceita()));
         return carteiraRepository.save(carteira);
     }
 
@@ -43,7 +52,7 @@ public class CarteiraService {
         Carteira carteira = obterCarteira(idCarteira);
         despesa.setCarteira(carteira);
         carteira.getDespesa().add(despesa);
-        carteira.setSaldo(carteira.getSaldo() - despesa.getValor());
+        carteira.setSaldoCarteira(carteira.getSaldoCarteira().subtract(despesa.getValorDespesa()));
         return carteiraRepository.save(carteira);
     }
 

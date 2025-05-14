@@ -1,8 +1,10 @@
 package com.viana.minhas_financas.dto;
 
+import java.math.BigDecimal;
+
 public class CarteiraResponseDTO {
     private Long idCarteira;
-    private Double saldo;
+    private BigDecimal saldoCarteira;
     private String nomeUsuario;
     private String emailUsuario;
 
@@ -14,12 +16,12 @@ public class CarteiraResponseDTO {
         this.idCarteira = idCarteira;
     }
 
-    public Double getSaldo() {
-        return saldo;
+    public BigDecimal getSaldoCarteira() {
+        return saldoCarteira;
     }
 
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
+    public void setSaldoCarteira(BigDecimal saldoCarteira) {
+        this.saldoCarteira = saldoCarteira;
     }
 
     public String getNomeUsuario() {

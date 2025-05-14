@@ -3,6 +3,7 @@ package com.viana.minhas_financas.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class Carteira {
     @JoinColumn(name = "id_usuario")
     @NotNull(message = "O campo usuario é obrigatório")
     private Usuario usuario;
-    private Double saldo;
+    private BigDecimal saldoCarteira;
     @OneToMany(mappedBy = "carteira", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Receita> receita = new ArrayList<>();
     @OneToMany(mappedBy = "carteira", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -25,16 +26,16 @@ public class Carteira {
 
     }
 
-    public Carteira(Usuario usuario, Double saldo) {
+    public Carteira(Usuario usuario, BigDecimal saldoCarteira) {
         this.usuario = usuario;
-        this.saldo = saldo;
+        this.saldoCarteira = saldoCarteira;
     }
 
     public Long getIdCarteira() {
         return idCarteira;
     }
 
-    public void setId(Long id) {
+    public void setIdCarteira(Long id) {
         this.idCarteira = id;
     }
 
@@ -62,11 +63,11 @@ public class Carteira {
         this.despesa = despesa;
     }
 
-    public double getSaldo() {
-        return saldo;
+    public BigDecimal getSaldoCarteira() {
+        return saldoCarteira;
     }
 
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
+    public void setSaldoCarteira(BigDecimal saldoCarteira) {
+        this.saldoCarteira = saldoCarteira;
     }
 }
