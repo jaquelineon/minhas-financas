@@ -23,7 +23,7 @@ public class Usuario {
     @Column(nullable = false)
     private String email;
     
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Carteira carteira;
 
     public Usuario() {

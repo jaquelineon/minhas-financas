@@ -18,20 +18,30 @@ public class Despesa {
 
     @NotNull(message = "É obrigatório escolher uma categoria.")
     @Column(nullable = false)
-    private Categoria categoria;
+    private Categoria categoriaDespesa;
 
     @NotNull(message = "A descrição não pode estar vazia.")
     @Column(nullable = false)
-    private String descricao;
+    private String descricaoDespesa;
 
     @ManyToOne
     @JoinColumn(name = "id_carteira")
     private Carteira carteira;
 
-    public Despesa(BigDecimal valorDespesa, Categoria categoria, String descricao) {
+    public Despesa(){}
+
+    public Despesa(BigDecimal valorDespesa, Categoria categoriaDespesa, String descricaoDespesa) {
         this.valorDespesa = valorDespesa;
-        this.categoria = categoria;
-        this.descricao = descricao;
+        this.categoriaDespesa = categoriaDespesa;
+        this.descricaoDespesa = descricaoDespesa;
+    }
+
+    public Long getIdDespesa() {
+        return idDespesa;
+    }
+
+    public void setIdDespesa(Long idDespesa) {
+        this.idDespesa = idDespesa;
     }
 
     public Carteira getCarteira() {
@@ -50,19 +60,19 @@ public class Despesa {
         this.valorDespesa = valorDespesa;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public Categoria getCategoriaDespesa() {
+        return categoriaDespesa;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategoriaDespesa(Categoria categoriaDespesa) {
+        this.categoriaDespesa = categoriaDespesa;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescricaoDespesa() {
+        return descricaoDespesa;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescricaoDespesa(String descricao) {
+        this.descricaoDespesa = descricaoDespesa;
     }
 }

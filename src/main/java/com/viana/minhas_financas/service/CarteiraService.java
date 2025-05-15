@@ -36,8 +36,13 @@ public class CarteiraService {
             dto.setIdCarteira(c.getIdCarteira());
             dto.setNomeUsuario(c.getUsuario().getNome());
             dto.setEmailUsuario(c.getUsuario().getEmail());
+            dto.setSaldoCarteira(c.getSaldoCarteira());
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    public Carteira salvarCarteira(Carteira carteira) {
+        return carteiraRepository.save(carteira);
     }
 
     public Carteira adicionarReceita(Long idCarteira, Receita receita) {

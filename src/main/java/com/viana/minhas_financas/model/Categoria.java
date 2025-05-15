@@ -1,4 +1,4 @@
-package com.viana.minhas_financas.model;
+    package com.viana.minhas_financas.model;
 
 public enum Categoria {
     SALARIO,

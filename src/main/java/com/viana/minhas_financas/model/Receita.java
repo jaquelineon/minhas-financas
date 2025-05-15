@@ -18,20 +18,33 @@ public class Receita {
 
     @NotNull(message = "É obrigatório escolher uma categoria.")
     @Column(nullable = false)
-    private Categoria categoria;
+    @Enumerated(EnumType.STRING)
+    private Categoria categoriaReceita;
 
     @NotNull(message = "A descrição não pode estar vazia.")
     @Column(nullable = false)
-    private String descricao;
+    private String descricaoReceita;
 
     @ManyToOne
     @JoinColumn(name = "id_carteira")
     private Carteira carteira;
 
-    public Receita (BigDecimal valorReceita, Categoria categoria, String descricao) {
+    public Receita() {
+
+    }
+
+    public Receita (BigDecimal valorReceita, Categoria categoriaReceita, String descricaoReceita) {
         this.valorReceita = valorReceita;
-        this.categoria = categoria;
-        this.descricao = descricao;
+        this.categoriaReceita = categoriaReceita;
+        this.descricaoReceita = descricaoReceita;
+    }
+
+    public Long getIdReceita() {
+        return idReceita;
+    }
+
+    public void setIdReceita(Long idReceita) {
+        this.idReceita = idReceita;
     }
 
     public BigDecimal getValorReceita() {
@@ -50,19 +63,19 @@ public class Receita {
         this.carteira = carteira;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public Categoria getCategoriaReceita() {
+        return categoriaReceita;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategoriaReceita(Categoria categoriaReceita) {
+        this.categoriaReceita = categoriaReceita;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescricaoReceita() {
+        return descricaoReceita;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescricaoReceita(String descricaoReceita) {
+        this.descricaoReceita = descricaoReceita;
     }
 }
