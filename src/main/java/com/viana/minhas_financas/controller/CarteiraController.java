@@ -10,7 +10,6 @@ import com.viana.minhas_financas.model.Receita;
 import com.viana.minhas_financas.repository.DespesaRepository;
 import com.viana.minhas_financas.repository.ReceitaRepository;
 import com.viana.minhas_financas.service.CarteiraService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +27,7 @@ public class CarteiraController {
     @Autowired
     private ReceitaRepository receitaRepository;
 
+    @Autowired
     private DespesaRepository despesaRepository;
 
     @PostMapping
@@ -72,7 +72,7 @@ public class CarteiraController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{IdCarteira/despesa}")
+    @PostMapping("/{idCarteira}/despesa")
     public ResponseEntity<DespesaResposeDTO> adicionarDespesa(@PathVariable Long idCarteira, @RequestBody DespesaResposeDTO dto) {
         Carteira carteira = carteiraService.obterCarteira(idCarteira);
         Despesa novaDespesa = new Despesa();

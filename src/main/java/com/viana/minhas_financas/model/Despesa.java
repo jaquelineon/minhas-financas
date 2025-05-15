@@ -18,6 +18,7 @@ public class Despesa {
 
     @NotNull(message = "É obrigatório escolher uma categoria.")
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Categoria categoriaDespesa;
 
     @NotNull(message = "A descrição não pode estar vazia.")
@@ -72,7 +73,7 @@ public class Despesa {
         return descricaoDespesa;
     }
 
-    public void setDescricaoDespesa(String descricao) {
+    public void setDescricaoDespesa(String descricaoDespesa) {
         this.descricaoDespesa = descricaoDespesa;
     }
 }
