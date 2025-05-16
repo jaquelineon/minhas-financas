@@ -1,15 +1,15 @@
 package com.viana.minhas_financas.controller;
 
-import com.viana.minhas_financas.dto.CarteiraRequestDTO;
-import com.viana.minhas_financas.dto.CarteiraResponseDTO;
-import com.viana.minhas_financas.dto.DespesaResposeDTO;
-import com.viana.minhas_financas.dto.ReceitaResponseDTO;
+import com.viana.minhas_financas.dto.*;
 import com.viana.minhas_financas.model.Carteira;
 import com.viana.minhas_financas.model.Despesa;
 import com.viana.minhas_financas.model.Receita;
+import com.viana.minhas_financas.repository.CarteiraRepository;
 import com.viana.minhas_financas.repository.DespesaRepository;
 import com.viana.minhas_financas.repository.ReceitaRepository;
 import com.viana.minhas_financas.service.CarteiraService;
+import com.viana.minhas_financas.service.ReceitaService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +23,12 @@ public class CarteiraController {
 
     @Autowired
     private CarteiraService carteiraService;
+
+    @Autowired
+    private ReceitaService receitaService;
+
+    @Autowired
+    private CarteiraRepository carteiraRepository;
 
     @Autowired
     private ReceitaRepository receitaRepository;
@@ -48,7 +54,28 @@ public class CarteiraController {
         return ResponseEntity.ok(carteiraService.listarCarteiras());
     }
 
-    @PostMapping ("/{idCarteira}/receita")
+    @GetMapping("/{idCarteira}")
+    public ResponseEntity<CarteiraResponseDTO> obterCarteira(@PathVariable Long idCarteira) {
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        CarteiraResponseDTO response = new CarteiraResponseDTO();
+        response.setIdCarteira(carteira.getIdCarteira());
+        response.setNomeUsuario(carteira.getUsuario().getNome());
+        response.setSaldoCarteira(carteira.getSaldoCarteira());
+        response.setReceitas(carteira.getReceita().stream().map(ReceitaResponseDTO::new).toList());
+        response.setDespesas(carteira.getDespesa().stream().map(DespesaResposeDTO::new).toList());
+        response.setEmailUsuario(carteira.getUsuario().getEmail());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{idCarteira}/deletar")
+    public ResponseEntity<?> deletarCarteira(@PathVariable Long idCarteira) {
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        carteiraRepository.delete(carteira);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{idCarteira}/receita")
     public ResponseEntity<ReceitaResponseDTO> adicionarReceita(@PathVariable Long idCarteira, @RequestBody ReceitaResponseDTO dto) {
         Carteira carteira = carteiraService.obterCarteira(idCarteira);
         Receita novaReceita = new Receita();
@@ -96,6 +123,32 @@ public class CarteiraController {
         response.setIdCarteira(novaDespesa.getCarteira().getIdCarteira());
 
         return ResponseEntity.ok(response);
+    }
 
+    @PutMapping("/{idCarteira}/receitas/{idReceita}")
+    public ResponseEntity<ReceitaUpdateDTO> editarReceita(@PathVariable Long idCarteira, @PathVariable Long idReceita, @RequestBody ReceitaUpdateDTO dto) {
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Receita receita = receitaService.buscarReceita(idReceita);
+
+        if (dto.getValorReceita() != null) {
+            receita.setValorReceita(dto.getValorReceita());
+        }
+        if (dto.getCategoriaReceita() != null) {
+            receita.setCategoriaReceita(dto.getCategoriaReceita());
+        }
+        if (dto.getDescricaoReceita() != null) {
+            receita.setDescricaoReceita(dto.getDescricaoReceita());
+        }
+
+        receitaRepository.save(receita);
+        receita.setCarteira(carteira);
+        carteiraRepository.save(carteira);
+
+        ReceitaUpdateDTO updateDTO = new ReceitaUpdateDTO();
+        updateDTO.setValorReceita(receita.getValorReceita());
+        updateDTO.setCategoriaReceita(receita.getCategoriaReceita());
+        updateDTO.setDescricaoReceita(receita.getDescricaoReceita());
+
+        return ResponseEntity.ok(updateDTO);
     }
 }
