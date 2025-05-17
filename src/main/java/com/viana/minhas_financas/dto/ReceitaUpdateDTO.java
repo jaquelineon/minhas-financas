@@ -9,8 +9,6 @@ public class ReceitaUpdateDTO {
     private Categoria categoriaReceita;
     private String descricaoReceita;
 
-    public ReceitaUpdateDTO() {}
-
     public BigDecimal getValorReceita() {
         return valorReceita;
     }

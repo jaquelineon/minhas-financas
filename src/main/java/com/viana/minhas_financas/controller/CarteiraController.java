@@ -8,6 +8,7 @@ import com.viana.minhas_financas.repository.CarteiraRepository;
 import com.viana.minhas_financas.repository.DespesaRepository;
 import com.viana.minhas_financas.repository.ReceitaRepository;
 import com.viana.minhas_financas.service.CarteiraService;
+import com.viana.minhas_financas.service.DespesaService;
 import com.viana.minhas_financas.service.ReceitaService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class CarteiraController {
 
     @Autowired
     private ReceitaService receitaService;
+
+    @Autowired
+    private DespesaService despesaService;
 
     @Autowired
     private CarteiraRepository carteiraRepository;
@@ -127,28 +131,23 @@ public class CarteiraController {
 
     @PutMapping("/{idCarteira}/receitas/{idReceita}")
     public ResponseEntity<ReceitaUpdateDTO> editarReceita(@PathVariable Long idCarteira, @PathVariable Long idReceita, @RequestBody ReceitaUpdateDTO dto) {
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
-        Receita receita = receitaService.buscarReceita(idReceita);
+        Receita receita = receitaService.editarReceita(idCarteira, idReceita, dto);
 
-        if (dto.getValorReceita() != null) {
-            receita.setValorReceita(dto.getValorReceita());
-        }
-        if (dto.getCategoriaReceita() != null) {
-            receita.setCategoriaReceita(dto.getCategoriaReceita());
-        }
-        if (dto.getDescricaoReceita() != null) {
-            receita.setDescricaoReceita(dto.getDescricaoReceita());
-        }
+        ReceitaUpdateDTO receitaUpdateDTO = new ReceitaUpdateDTO();
+        receitaUpdateDTO.setValorReceita(receita.getValorReceita());
+        receitaUpdateDTO.setCategoriaReceita(receita.getCategoriaReceita());
+        receitaUpdateDTO.setDescricaoReceita(receita.getDescricaoReceita());
+        return ResponseEntity.ok(receitaUpdateDTO);
+    }
 
-        receitaRepository.save(receita);
-        receita.setCarteira(carteira);
-        carteiraRepository.save(carteira);
+    @PutMapping("/{idCarteira}/despesas/{idDespesa}")
+    public ResponseEntity<DespesaUpdateDTO> editarDespesa(@PathVariable Long idCarteira, @PathVariable Long idDespesa, @RequestBody DespesaUpdateDTO dto) {
+        Despesa despesa = despesaService.editarDespesa(idCarteira, idDespesa, dto);
 
-        ReceitaUpdateDTO updateDTO = new ReceitaUpdateDTO();
-        updateDTO.setValorReceita(receita.getValorReceita());
-        updateDTO.setCategoriaReceita(receita.getCategoriaReceita());
-        updateDTO.setDescricaoReceita(receita.getDescricaoReceita());
-
-        return ResponseEntity.ok(updateDTO);
+        DespesaUpdateDTO despesaUpdateDTO = new DespesaUpdateDTO();
+        despesaUpdateDTO.setValorDespesa(despesa.getValorDespesa());
+        despesaUpdateDTO.setCategoraDespesa(despesa.getCategoriaDespesa());
+        despesaUpdateDTO.setDescricaoDespesa(despesa.getDescricaoDespesa());
+        return ResponseEntity.ok(despesaUpdateDTO);
     }
 }
