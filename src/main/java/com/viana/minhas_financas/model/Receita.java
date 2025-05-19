@@ -29,6 +29,9 @@ public class Receita {
     @JoinColumn(name = "id_carteira")
     private Carteira carteira;
 
+    @Column(nullable = false)
+    private Boolean receitaAtiva = true;
+
     public Receita() {
 
     }
@@ -77,5 +80,13 @@ public class Receita {
 
     public void setDescricaoReceita(String descricaoReceita) {
         this.descricaoReceita = descricaoReceita;
+    }
+
+    public Boolean getReceitaAtiva() {
+        return receitaAtiva;
+    }
+
+    public void setReceitaAtiva(Boolean receitaAtiva) {
+        this.receitaAtiva = receitaAtiva;
     }
 }

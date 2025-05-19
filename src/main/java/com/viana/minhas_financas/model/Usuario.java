@@ -26,6 +26,9 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Carteira carteira;
 
+    @Column(nullable = false)
+    private Boolean usuarioAtivo = true;
+
     public Usuario() {
     }
 
@@ -73,5 +76,13 @@ public class Usuario {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public Boolean getUsuarioAtivo() {
+        return usuarioAtivo;
+    }
+
+    public void setUsuarioAtivo(Boolean usuarioAtivo) {
+        this.usuarioAtivo = usuarioAtivo;
     }
 }

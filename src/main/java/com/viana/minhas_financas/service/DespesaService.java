@@ -1,5 +1,6 @@
 package com.viana.minhas_financas.service;
 
+import com.viana.minhas_financas.dto.DespesaRequestDTO;
 import com.viana.minhas_financas.dto.DespesaUpdateDTO;
 import com.viana.minhas_financas.model.Carteira;
 import com.viana.minhas_financas.model.Despesa;
@@ -7,6 +8,8 @@ import com.viana.minhas_financas.repository.CarteiraRepository;
 import com.viana.minhas_financas.repository.DespesaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class DespesaService {
@@ -17,18 +20,44 @@ public class DespesaService {
     @Autowired
     private CarteiraRepository carteiraRepository;
 
+    @Autowired
+    private CarteiraService carteiraService;
+
     public Despesa buscarDespesa(Long idDespesa) {
         return despesaRepository.findById(idDespesa).orElseThrow(()-> new RuntimeException("Despesa não encontrada"));
     }
 
+    public Despesa salvarDespesa(Despesa despesa) {
+        return despesaRepository.save(despesa);
+    }
+
+    public Despesa adicionarDespesa(Long idCarteira, DespesaRequestDTO dto) {
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Despesa novaDespesa = new Despesa();
+        novaDespesa.setValorDespesa(dto.getValorDespesa());
+        novaDespesa.setCategoriaDespesa(dto.getCategoriaDespesa());
+        novaDespesa.setDescricaoDespesa(dto.getDescricaoDespesa());
+        novaDespesa.setCarteira(carteira);
+        novaDespesa.setDespesaAtiva(true);
+
+        salvarDespesa(novaDespesa);
+
+        BigDecimal saldoAtual = carteira.getSaldoCarteira() != null ? carteira.getSaldoCarteira() : BigDecimal.ZERO;
+        BigDecimal novoSaldo = saldoAtual.subtract(novaDespesa.getValorDespesa());
+        carteira.setSaldoCarteira(novoSaldo);
+
+        carteiraService.salvarCarteira(carteira);
+
+        return novaDespesa;
+    }
+
     public Despesa editarDespesa(Long idCarteira, Long idDespesa, DespesaUpdateDTO dto) {
-        Carteira carteira = carteiraRepository.findById(idCarteira).orElseThrow(()-> new RuntimeException("Carteira não encontrada"));
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
         Despesa despesa = buscarDespesa(idDespesa);
 
         if (!despesa.getCarteira().getIdCarteira().equals(idCarteira)) {
             throw new RuntimeException("A despesa não pertence à carteira informada");
         }
-
             if (dto.getValorDespesa() != null) {
                 despesa.setValorDespesa(dto.getValorDespesa());
             }
@@ -40,8 +69,23 @@ public class DespesaService {
             }
 
         despesa.setCarteira(carteira);
-        carteiraRepository.save(carteira);
+        carteiraService.salvarCarteira(carteira);
 
-        return despesaRepository.save(despesa);
+        return salvarDespesa(despesa);
+    }
+
+    public void deletarDespesa(Long idCarteira, Long idDespesa) {
+        Despesa despesa = buscarDespesa(idDespesa);
+
+        if (!despesa.getCarteira().getIdCarteira().equals(idCarteira)) {
+            throw new RuntimeException("A despesa informada não pertence à carteira.");
+        }
+
+        if (!despesa.getDespesaAtiva()) {
+            throw new RuntimeException("Despesa inativa");
+        }
+
+        despesa.setDespesaAtiva(false);
+        salvarDespesa(despesa);
     }
 }

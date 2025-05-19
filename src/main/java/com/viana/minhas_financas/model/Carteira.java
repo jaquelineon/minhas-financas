@@ -21,6 +21,8 @@ public class Carteira {
     private List<Receita> receita = new ArrayList<>();
     @OneToMany(mappedBy = "carteira", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Despesa> despesa = new ArrayList<>();
+    @Column(nullable = false)
+    private Boolean carteiraAtiva = true;
 
     public Carteira() {
 
@@ -69,5 +71,13 @@ public class Carteira {
 
     public void setSaldoCarteira(BigDecimal saldoCarteira) {
         this.saldoCarteira = saldoCarteira;
+    }
+
+    public Boolean getCarteiraAtiva() {
+        return carteiraAtiva;
+    }
+
+    public void setCarteiraAtiva(Boolean carteiraAtiva) {
+        this.carteiraAtiva = carteiraAtiva;
     }
 }

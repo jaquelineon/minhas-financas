@@ -10,8 +10,8 @@ import com.viana.minhas_financas.repository.ReceitaRepository;
 import com.viana.minhas_financas.service.CarteiraService;
 import com.viana.minhas_financas.service.DespesaService;
 import com.viana.minhas_financas.service.ReceitaService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,6 +61,7 @@ public class CarteiraController {
     @GetMapping("/{idCarteira}")
     public ResponseEntity<CarteiraResponseDTO> obterCarteira(@PathVariable Long idCarteira) {
         Carteira carteira = carteiraService.obterCarteira(idCarteira);
+
         CarteiraResponseDTO response = new CarteiraResponseDTO();
         response.setIdCarteira(carteira.getIdCarteira());
         response.setNomeUsuario(carteira.getUsuario().getNome());
@@ -72,59 +73,30 @@ public class CarteiraController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{idCarteira}/deletar")
-    public ResponseEntity<?> deletarCarteira(@PathVariable Long idCarteira) {
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
-        carteiraRepository.delete(carteira);
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/{idCarteira}/receita")
-    public ResponseEntity<ReceitaResponseDTO> adicionarReceita(@PathVariable Long idCarteira, @RequestBody ReceitaResponseDTO dto) {
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
-        Receita novaReceita = new Receita();
+    public ResponseEntity<ReceitaResponseDTO> adicionarReceita(@PathVariable Long idCarteira, @RequestBody ReceitaRequestDTO dto) {
+        Receita receita = receitaService.adicionarReceita(idCarteira, dto);
+
         ReceitaResponseDTO response = new ReceitaResponseDTO();
-        novaReceita.setValorReceita(dto.getValorReceita());
-        novaReceita.setCategoriaReceita(dto.getCategoriaReceita());
-        novaReceita.setDescricaoReceita(dto.getDescricaoReceita());
-        novaReceita.setCarteira(carteira);
-        receitaRepository.save(novaReceita);
+        response.setIdReceita(receita.getIdReceita());
+        response.setValorReceita(receita.getValorReceita());
+        response.setCategoriaReceita(receita.getCategoriaReceita());
+        response.setDescricaoReceita(receita.getDescricaoReceita());
+        response.setIdCarteira(receita.getCarteira().getIdCarteira());
 
-        BigDecimal saldoAtual = carteira.getSaldoCarteira() != null ? carteira.getSaldoCarteira() : BigDecimal.ZERO;
-        carteira.setSaldoCarteira(saldoAtual.add(novaReceita.getValorReceita()));
-        carteiraService.salvarCarteira(carteira);
-
-        response.setIdReceita(novaReceita.getIdReceita());
-        response.setValorReceita(novaReceita.getValorReceita());
-        response.setCategoriaReceita(novaReceita.getCategoriaReceita());
-        response.setDescricaoReceita(novaReceita.getDescricaoReceita());
-        response.setIdCarteira(novaReceita.getCarteira().getIdCarteira());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/{idCarteira}/despesa")
-    public ResponseEntity<DespesaResposeDTO> adicionarDespesa(@PathVariable Long idCarteira, @RequestBody DespesaResposeDTO dto) {
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
-        Despesa novaDespesa = new Despesa();
-        novaDespesa.setValorDespesa(dto.getValorDespesa());
-        novaDespesa.setCategoriaDespesa(dto.getCategoriaDespesa());
-        novaDespesa.setDescricaoDespesa(dto.getDescricaoDespesa());
-        novaDespesa.setCarteira(carteira);
-        despesaRepository.save(novaDespesa);
-
-        BigDecimal saldoAtual = carteira.getSaldoCarteira() != null ? carteira.getSaldoCarteira() : BigDecimal.ZERO;
-        BigDecimal novoSaldo = saldoAtual.subtract(novaDespesa.getValorDespesa());
-        carteira.setSaldoCarteira(novoSaldo);
-
-        carteiraService.salvarCarteira(carteira);
+    public ResponseEntity<DespesaResposeDTO> adicionarDespesa(@PathVariable Long idCarteira, @RequestBody DespesaRequestDTO dto) {
+        Despesa despesa = despesaService.adicionarDespesa(idCarteira, dto);
 
         DespesaResposeDTO response = new DespesaResposeDTO();
-        response.setIdDespesa(novaDespesa.getIdDespesa());
-        response.setValorDespesa(novaDespesa.getValorDespesa());
-        response.setCategoriaDespesa(novaDespesa.getCategoriaDespesa());
-        response.setDescricaoDespesa(novaDespesa.getDescricaoDespesa());
-        response.setIdCarteira(novaDespesa.getCarteira().getIdCarteira());
+        response.setIdDespesa(despesa.getIdDespesa());
+        response.setValorDespesa(despesa.getValorDespesa());
+        response.setCategoriaDespesa(despesa.getCategoriaDespesa());
+        response.setDescricaoDespesa(despesa.getDescricaoDespesa());
+        response.setIdCarteira(despesa.getCarteira().getIdCarteira());
 
         return ResponseEntity.ok(response);
     }
@@ -149,5 +121,17 @@ public class CarteiraController {
         despesaUpdateDTO.setCategoraDespesa(despesa.getCategoriaDespesa());
         despesaUpdateDTO.setDescricaoDespesa(despesa.getDescricaoDespesa());
         return ResponseEntity.ok(despesaUpdateDTO);
+    }
+
+    @DeleteMapping("/{idCarteira}/deletar")
+    public ResponseEntity<?> deletarCarteira(@PathVariable Long idCarteira) {
+        carteiraService.deletarCarteira(idCarteira);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("{idCarteira}/receitas/deletar/{idReceita}")
+    public ResponseEntity<ReceitaResponseDTO> deletarReceita(@PathVariable Long idCarteira, @PathVariable Long idReceita) {
+        receitaService.deletarReceita(idCarteira, idReceita);
+        return ResponseEntity.ok().build();
     }
 }

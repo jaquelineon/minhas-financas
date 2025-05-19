@@ -29,6 +29,9 @@ public class Despesa {
     @JoinColumn(name = "id_carteira")
     private Carteira carteira;
 
+    @Column(nullable = false)
+    private Boolean despesaAtiva = true;
+
     public Despesa(){}
 
     public Despesa(BigDecimal valorDespesa, Categoria categoriaDespesa, String descricaoDespesa) {
@@ -75,5 +78,13 @@ public class Despesa {
 
     public void setDescricaoDespesa(String descricaoDespesa) {
         this.descricaoDespesa = descricaoDespesa;
+    }
+
+    public Boolean getDespesaAtiva() {
+        return despesaAtiva;
+    }
+
+    public void setDespesaAtiva(Boolean despesaAtiva) {
+        this.despesaAtiva = despesaAtiva;
     }
 }

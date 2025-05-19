@@ -1,13 +1,9 @@
 package com.viana.minhas_financas.dto;
 
-import com.viana.minhas_financas.model.Carteira;
 import com.viana.minhas_financas.model.Categoria;
 import com.viana.minhas_financas.model.Receita;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.math.BigDecimal;
-import java.util.List;
-;
 
 public class ReceitaResponseDTO {
     private Long idReceita;
