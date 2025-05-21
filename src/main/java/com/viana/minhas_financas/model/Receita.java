@@ -40,6 +40,7 @@ public class Receita {
         this.valorReceita = valorReceita;
         this.categoriaReceita = categoriaReceita;
         this.descricaoReceita = descricaoReceita;
+        this.receitaAtiva = true;
     }
 
     public Long getIdReceita() {

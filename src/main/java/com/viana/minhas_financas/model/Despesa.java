@@ -38,6 +38,7 @@ public class Despesa {
         this.valorDespesa = valorDespesa;
         this.categoriaDespesa = categoriaDespesa;
         this.descricaoDespesa = descricaoDespesa;
+        this.despesaAtiva = true;
     }
 
     public Long getIdDespesa() {

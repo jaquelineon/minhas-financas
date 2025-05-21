@@ -1,6 +1,7 @@
 package com.viana.minhas_financas.service;
 
 import com.viana.minhas_financas.dto.ReceitaRequestDTO;
+import com.viana.minhas_financas.dto.ReceitaResponseDTO;
 import com.viana.minhas_financas.dto.ReceitaUpdateDTO;
 import com.viana.minhas_financas.model.Carteira;
 import com.viana.minhas_financas.model.Receita;
@@ -86,5 +87,24 @@ public class ReceitaService {
 
         receita.setReceitaAtiva(false);
         salvarReceita(receita);
+
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        carteira.setSaldoCarteira(carteira.getSaldoCarteira().subtract(receita.getValorReceita()));
+        carteiraService.salvarCarteira(carteira);
+    }
+
+    public Receita reativarReceita(Long idCarteira, Long idReceita) {
+        Receita receita = buscarReceita(idReceita);
+
+        if (receita.getReceitaAtiva()) {
+            throw new RuntimeException("A receita já esta ativa");
+        }
+        receita.setReceitaAtiva(true);
+        salvarReceita(receita);
+
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        carteira.setSaldoCarteira(carteira.getSaldoCarteira().add(receita.getValorReceita()));
+        carteiraService.salvarCarteira(carteira);
+        return receita;
     }
 }

@@ -36,6 +36,7 @@ public class Usuario {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.email = email;
+        this.usuarioAtivo = true;
     }
 
     public Long getIdUsuario() {

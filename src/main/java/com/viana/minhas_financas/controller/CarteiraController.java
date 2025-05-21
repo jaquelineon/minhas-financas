@@ -66,8 +66,8 @@ public class CarteiraController {
         response.setIdCarteira(carteira.getIdCarteira());
         response.setNomeUsuario(carteira.getUsuario().getNome());
         response.setSaldoCarteira(carteira.getSaldoCarteira());
-        response.setReceitas(carteira.getReceita().stream().map(ReceitaResponseDTO::new).toList());
-        response.setDespesas(carteira.getDespesa().stream().map(DespesaResposeDTO::new).toList());
+        response.setReceitas(carteira.getReceita().stream().filter(Receita::getReceitaAtiva).map(ReceitaResponseDTO::new).toList());
+        response.setDespesas(carteira.getDespesa().stream().filter(Despesa::getDespesaAtiva).map(DespesaResposeDTO::new).toList());
         response.setEmailUsuario(carteira.getUsuario().getEmail());
 
         return ResponseEntity.ok(response);
@@ -129,9 +129,62 @@ public class CarteiraController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("{idCarteira}/receitas/deletar/{idReceita}")
-    public ResponseEntity<ReceitaResponseDTO> deletarReceita(@PathVariable Long idCarteira, @PathVariable Long idReceita) {
+    @DeleteMapping("/{idCarteira}/receitas/deletar/{idReceita}")
+    public ResponseEntity<Void> deletarReceita(@PathVariable Long idCarteira, @PathVariable Long idReceita) {
         receitaService.deletarReceita(idCarteira, idReceita);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{idCarteira}/despesas/deletar/{idDespesa}")
+    public ResponseEntity<Void> deletarDespesa(@PathVariable Long idCarteira, @PathVariable Long idDespesa) {
+        despesaService.deletarDespesa(idCarteira, idDespesa);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/reativar-carteira/{idCarteira}")
+    public ResponseEntity<CarteiraResponseDTO> reativarCarteira(@PathVariable Long idCarteira) {
+        carteiraService.reativarCarteira(idCarteira);
+
+        CarteiraResponseDTO response = new CarteiraResponseDTO();
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        response.setSaldoCarteira(carteira.getSaldoCarteira());
+        response.setNomeUsuario(carteira.getUsuario().getNome());
+        response.setEmailUsuario(carteira.getUsuario().getEmail());
+        response.setReceitas(carteira.getReceita().stream()
+                .filter(Receita::getReceitaAtiva)
+                .map(ReceitaResponseDTO:: new).toList());
+        response.setDespesas(carteira.getDespesa().stream()
+                .filter(Despesa::getDespesaAtiva)
+                .map(DespesaResposeDTO::new).toList());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("{idCarteira}/reativar-receita/{idReceita}")
+    public ResponseEntity<ReceitaResponseDTO> reativarReceita(@PathVariable Long idCarteira, @PathVariable Long idReceita){
+        Receita receita = receitaService.reativarReceita(idCarteira, idReceita);
+
+        ReceitaResponseDTO response = new ReceitaResponseDTO();
+        response.setIdCarteira(receita.getCarteira().getIdCarteira());
+        response.setIdReceita(receita.getIdReceita());
+        response.setValorReceita(receita.getValorReceita());
+        response.setCategoriaReceita(receita.getCategoriaReceita());
+        response.setDescricaoReceita(receita.getDescricaoReceita());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("{idCarteira}/reativar-despesa/{idDespesa}")
+    public ResponseEntity<DespesaResposeDTO> reativarDespesa(@PathVariable Long idCarteira, @PathVariable Long idDespesa) {
+        Despesa despesa = despesaService.reativarDespesa(idCarteira, idDespesa);
+
+        DespesaResposeDTO response = new DespesaResposeDTO();
+        response.setIdCarteira(despesa.getCarteira().getIdCarteira());
+        response.setValorDespesa(despesa.getValorDespesa());
+        response.setCategoriaDespesa(despesa.getCategoriaDespesa());
+        response.setDescricaoDespesa(despesa.getDescricaoDespesa());
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }

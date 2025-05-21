@@ -8,4 +8,5 @@ import java.util.List;
 public interface CarteiraRepository extends JpaRepository<Carteira, Long> {
 
     List<Carteira> findByCarteiraAtivaTrue();
+
 }

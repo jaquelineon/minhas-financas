@@ -45,23 +45,42 @@ public class CarteiraService {
             dto.setNomeUsuario(carteira.getUsuario().getNome());
             dto.setEmailUsuario(carteira.getUsuario().getEmail());
             dto.setSaldoCarteira(carteira.getSaldoCarteira());
-            dto.setReceitas(carteira.getReceita().stream().map(ReceitaResponseDTO:: new).toList());
-            dto.setDespesas(carteira.getDespesa().stream().map(DespesaResposeDTO:: new).toList());
+
+            dto.setReceitas(carteira.getReceita().stream()
+                    .filter(Receita::getReceitaAtiva)
+                    .map(ReceitaResponseDTO::new)
+                    .toList());
+
+            dto.setDespesas(carteira.getDespesa().stream()
+                    .filter(Despesa::getDespesaAtiva)
+                    .map(DespesaResposeDTO::new)
+                    .toList());
             return dto;
         }).collect(Collectors.toList());
     }
 
     public Carteira obterCarteira(Long idCarteira) {
-        return carteiraRepository.findById(idCarteira).orElseThrow(() -> new RuntimeException("Carteira não encontrada."));
+        return carteiraRepository.findById(idCarteira).orElseThrow(() -> new RuntimeException("Carteira não encontrada"));
     }
 
     public void deletarCarteira(Long idCarteira){
         Carteira carteira = obterCarteira(idCarteira);
 
         if (!carteira.getCarteiraAtiva()) {
-            throw new RuntimeException("Carteira inativa");
+            throw new RuntimeException("A carteira já esta inativa");
         }
         carteira.setCarteiraAtiva(false);
         salvarCarteira(carteira);
+    }
+
+    public Carteira reativarCarteira(Long idCarteira){
+        Carteira carteira = obterCarteira(idCarteira);
+
+        if (carteira.getCarteiraAtiva()) {
+            throw new RuntimeException("A carteira já esta ativa");
+        }
+        carteira.setCarteiraAtiva(true);
+        salvarCarteira(carteira);
+        return carteira;
     }
 }

@@ -87,5 +87,26 @@ public class DespesaService {
 
         despesa.setDespesaAtiva(false);
         salvarDespesa(despesa);
+
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        carteira.setSaldoCarteira(carteira.getSaldoCarteira().add(despesa.getValorDespesa()));
+        carteiraService.salvarCarteira(carteira);
+    }
+
+    public Despesa reativarDespesa(Long idCarteira, Long idDespesa){
+        Despesa despesa = buscarDespesa(idDespesa);
+
+        if (despesa.getDespesaAtiva()) {
+            throw new RuntimeException("A despesa já esta ativa");
+        }
+
+        despesa.setDespesaAtiva(true);
+        salvarDespesa(despesa);
+
+        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        carteira.setSaldoCarteira(carteira.getSaldoCarteira().subtract(despesa.getValorDespesa()));
+        carteiraService.salvarCarteira(carteira);
+
+        return despesa;
     }
 }

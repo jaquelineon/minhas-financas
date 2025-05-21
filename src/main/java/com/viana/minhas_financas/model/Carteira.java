@@ -31,14 +31,11 @@ public class Carteira {
     public Carteira(Usuario usuario, BigDecimal saldoCarteira) {
         this.usuario = usuario;
         this.saldoCarteira = saldoCarteira;
+        this.carteiraAtiva = true;
     }
 
     public Long getIdCarteira() {
         return idCarteira;
-    }
-
-    public void setIdCarteira(Long id) {
-        this.idCarteira = id;
     }
 
     public Usuario getUsuario() {
