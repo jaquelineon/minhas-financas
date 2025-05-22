@@ -4,7 +4,6 @@ import com.viana.minhas_financas.dto.DespesaRequestDTO;
 import com.viana.minhas_financas.dto.DespesaUpdateDTO;
 import com.viana.minhas_financas.model.Carteira;
 import com.viana.minhas_financas.model.Despesa;
-import com.viana.minhas_financas.repository.CarteiraRepository;
 import com.viana.minhas_financas.repository.DespesaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +17,6 @@ public class DespesaService {
     private DespesaRepository despesaRepository;
 
     @Autowired
-    private CarteiraRepository carteiraRepository;
-
-    @Autowired
     private CarteiraService carteiraService;
 
     public Despesa buscarDespesa(Long idDespesa) {
@@ -32,7 +28,7 @@ public class DespesaService {
     }
 
     public Despesa adicionarDespesa(Long idCarteira, DespesaRequestDTO dto) {
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Carteira carteira = carteiraService.buscarCarteira(idCarteira);
         Despesa novaDespesa = new Despesa();
         novaDespesa.setValorDespesa(dto.getValorDespesa());
         novaDespesa.setCategoriaDespesa(dto.getCategoriaDespesa());
@@ -52,7 +48,7 @@ public class DespesaService {
     }
 
     public Despesa editarDespesa(Long idCarteira, Long idDespesa, DespesaUpdateDTO dto) {
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Carteira carteira = carteiraService.buscarCarteira(idCarteira);
         Despesa despesa = buscarDespesa(idDespesa);
 
         if (!despesa.getCarteira().getIdCarteira().equals(idCarteira)) {
@@ -74,7 +70,7 @@ public class DespesaService {
         return salvarDespesa(despesa);
     }
 
-    public void deletarDespesa(Long idCarteira, Long idDespesa) {
+    public void desativarDespesa(Long idCarteira, Long idDespesa) {
         Despesa despesa = buscarDespesa(idDespesa);
 
         if (!despesa.getCarteira().getIdCarteira().equals(idCarteira)) {
@@ -88,7 +84,7 @@ public class DespesaService {
         despesa.setDespesaAtiva(false);
         salvarDespesa(despesa);
 
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Carteira carteira = carteiraService.buscarCarteira(idCarteira);
         carteira.setSaldoCarteira(carteira.getSaldoCarteira().add(despesa.getValorDespesa()));
         carteiraService.salvarCarteira(carteira);
     }
@@ -103,7 +99,7 @@ public class DespesaService {
         despesa.setDespesaAtiva(true);
         salvarDespesa(despesa);
 
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Carteira carteira = carteiraService.buscarCarteira(idCarteira);
         carteira.setSaldoCarteira(carteira.getSaldoCarteira().subtract(despesa.getValorDespesa()));
         carteiraService.salvarCarteira(carteira);
 

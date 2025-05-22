@@ -3,8 +3,6 @@ package com.viana.minhas_financas.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
-
 @Entity
 public class Usuario {
     @Id
@@ -14,10 +12,6 @@ public class Usuario {
     @NotNull(message = "O nome é obrigatório.")
     @Column(nullable = false)
     private String nome;
-
-    @NotNull(message = "A data de nascimento é obrigatória.")
-    @Column(nullable = false)
-    private LocalDate dataNascimento;
 
     @NotNull(message = "O e-mail não pode ser nulo.")
     @Column(nullable = false)
@@ -29,12 +23,10 @@ public class Usuario {
     @Column(nullable = false)
     private Boolean usuarioAtivo = true;
 
-    public Usuario() {
-    }
+    public Usuario() {}
 
-    public Usuario(String nome, LocalDate dataNascimento, String email) {
+    public Usuario(String nome, String email) {
         this.nome = nome;
-        this.dataNascimento = dataNascimento;
         this.email = email;
         this.usuarioAtivo = true;
     }
@@ -69,14 +61,6 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
     }
 
     public Boolean getUsuarioAtivo() {

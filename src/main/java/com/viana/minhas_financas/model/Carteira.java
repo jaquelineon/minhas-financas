@@ -24,9 +24,7 @@ public class Carteira {
     @Column(nullable = false)
     private Boolean carteiraAtiva = true;
 
-    public Carteira() {
-
-    }
+    public Carteira() {}
 
     public Carteira(Usuario usuario, BigDecimal saldoCarteira) {
         this.usuario = usuario;

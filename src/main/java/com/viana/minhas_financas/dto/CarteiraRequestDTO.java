@@ -1,13 +1,11 @@
 package com.viana.minhas_financas.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public class CarteiraRequestDTO {
     private Long idCarteira;
     private String nome;
     private String email;
-    private LocalDate dataNascimento;
     private BigDecimal saldoCarteira;
 
     public Long getIdCarteira() {
@@ -32,14 +30,6 @@ public class CarteiraRequestDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
     }
 
     public BigDecimal getSaldoCarteira() {

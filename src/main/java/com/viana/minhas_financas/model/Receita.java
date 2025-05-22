@@ -32,9 +32,7 @@ public class Receita {
     @Column(nullable = false)
     private Boolean receitaAtiva = true;
 
-    public Receita() {
-
-    }
+    public Receita() {}
 
     public Receita (BigDecimal valorReceita, Categoria categoriaReceita, String descricaoReceita) {
         this.valorReceita = valorReceita;

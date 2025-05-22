@@ -1,11 +1,9 @@
 package com.viana.minhas_financas.service;
 
 import com.viana.minhas_financas.dto.ReceitaRequestDTO;
-import com.viana.minhas_financas.dto.ReceitaResponseDTO;
 import com.viana.minhas_financas.dto.ReceitaUpdateDTO;
 import com.viana.minhas_financas.model.Carteira;
 import com.viana.minhas_financas.model.Receita;
-import com.viana.minhas_financas.repository.CarteiraRepository;
 import com.viana.minhas_financas.repository.ReceitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +17,6 @@ public class ReceitaService {
     private ReceitaRepository receitaRepository;
 
     @Autowired
-    private CarteiraRepository carteiraRepository;
-
-    @Autowired
     private CarteiraService carteiraService;
 
     public Receita buscarReceita(Long idReceita) {
@@ -33,7 +28,7 @@ public class ReceitaService {
     }
 
     public Receita adicionarReceita(Long idCarteira, ReceitaRequestDTO dto) {
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Carteira carteira = carteiraService.buscarCarteira(idCarteira);
         Receita novaReceita = new Receita();
         novaReceita.setValorReceita(dto.getValorReceita());
         novaReceita.setCategoriaReceita(dto.getCategoriaReceita());
@@ -51,7 +46,7 @@ public class ReceitaService {
     }
 
     public Receita editarReceita(Long idCarteira, Long idReceita, ReceitaUpdateDTO dto) {
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Carteira carteira = carteiraService.buscarCarteira(idCarteira);
         Receita receita = buscarReceita(idReceita);
 
         if (!receita.getCarteira().getIdCarteira().equals(idCarteira)) {
@@ -74,7 +69,7 @@ public class ReceitaService {
         return salvarReceita(receita);
     }
 
-    public void deletarReceita(Long idCarteira, Long idReceita) {
+    public void desativarReceita(Long idCarteira, Long idReceita) {
         Receita receita = buscarReceita(idReceita);
 
         if (!receita.getCarteira().getIdCarteira().equals(idCarteira)) {
@@ -88,7 +83,7 @@ public class ReceitaService {
         receita.setReceitaAtiva(false);
         salvarReceita(receita);
 
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Carteira carteira = carteiraService.buscarCarteira(idCarteira);
         carteira.setSaldoCarteira(carteira.getSaldoCarteira().subtract(receita.getValorReceita()));
         carteiraService.salvarCarteira(carteira);
     }
@@ -102,7 +97,7 @@ public class ReceitaService {
         receita.setReceitaAtiva(true);
         salvarReceita(receita);
 
-        Carteira carteira = carteiraService.obterCarteira(idCarteira);
+        Carteira carteira = carteiraService.buscarCarteira(idCarteira);
         carteira.setSaldoCarteira(carteira.getSaldoCarteira().add(receita.getValorReceita()));
         carteiraService.salvarCarteira(carteira);
         return receita;

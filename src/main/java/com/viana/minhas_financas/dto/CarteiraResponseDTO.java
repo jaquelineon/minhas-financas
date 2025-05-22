@@ -1,8 +1,5 @@
 package com.viana.minhas_financas.dto;
 
-import com.viana.minhas_financas.model.Despesa;
-import com.viana.minhas_financas.model.Receita;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +10,7 @@ public class CarteiraResponseDTO {
     private String nomeUsuario;
     private String emailUsuario;
     private List<ReceitaResponseDTO> receitas = new ArrayList<>();
-    private List<DespesaResposeDTO> despesas = new ArrayList<>();
+    private List<DespesaResponseDTO> despesas = new ArrayList<>();
 
     public Long getIdCarteira() {
         return idCarteira;
@@ -55,11 +52,11 @@ public class CarteiraResponseDTO {
         this.receitas = receitas;
     }
 
-    public List<DespesaResposeDTO> getDespesas() {
+    public List<DespesaResponseDTO> getDespesas() {
         return despesas;
     }
 
-    public void setDespesas(List<DespesaResposeDTO> despesas) {
+    public void setDespesas(List<DespesaResponseDTO> despesas) {
         this.despesas = despesas;
     }
 }

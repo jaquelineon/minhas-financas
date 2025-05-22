@@ -5,16 +5,16 @@ import com.viana.minhas_financas.model.Despesa;
 
 import java.math.BigDecimal;
 
-public class DespesaResposeDTO {
+public class DespesaResponseDTO {
     private Long idDespesa;
     private BigDecimal valorDespesa;
     private Categoria categoriaDespesa;
     private String descricaoDespesa;
     private Long idCarteira;
 
-    public DespesaResposeDTO() {}
+    public DespesaResponseDTO() {}
 
-    public DespesaResposeDTO(Despesa despesa) {
+    public DespesaResponseDTO(Despesa despesa) {
         this.idDespesa = despesa.getIdDespesa();
         this.valorDespesa = despesa.getValorDespesa();
         this.categoriaDespesa = despesa.getCategoriaDespesa();
