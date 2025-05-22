@@ -50,7 +50,7 @@ public class CarteiraController {
         return ResponseEntity.ok(carteiraService.listarCarteiras());
     }
 
-    @GetMapping("carteiras/{idCarteira}")
+    @GetMapping("/{idCarteira}")
     public ResponseEntity<CarteiraResponseDTO> obterCarteira(@PathVariable Long idCarteira) {
         Carteira carteira = carteiraService.buscarCarteira(idCarteira);
 
@@ -65,7 +65,7 @@ public class CarteiraController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("carteiras/{idCarteira}/receitas")
+    @PostMapping("/{idCarteira}/receitas")
     public ResponseEntity<ReceitaResponseDTO> adicionarReceita(@PathVariable Long idCarteira, @RequestBody ReceitaRequestDTO dto) {
         Receita receita = receitaService.adicionarReceita(idCarteira, dto);
 
@@ -79,7 +79,7 @@ public class CarteiraController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("carteiras/{idCarteira}/despesas")
+    @PostMapping("/{idCarteira}/despesas")
     public ResponseEntity<DespesaResponseDTO> adicionarDespesa(@PathVariable Long idCarteira, @RequestBody DespesaRequestDTO dto) {
         Despesa despesa = despesaService.adicionarDespesa(idCarteira, dto);
 
@@ -93,7 +93,7 @@ public class CarteiraController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("carteiras/{idCarteira}/receitas/{idReceita}")
+    @PutMapping("/{idCarteira}/receitas/{idReceita}")
     public ResponseEntity<ReceitaUpdateDTO> editarReceita(@PathVariable Long idCarteira, @PathVariable Long idReceita, @RequestBody ReceitaUpdateDTO dto) {
         Receita receita = receitaService.editarReceita(idCarteira, idReceita, dto);
 
@@ -104,7 +104,7 @@ public class CarteiraController {
         return ResponseEntity.ok(receitaUpdateDTO);
     }
 
-    @PutMapping("carteiras/{idCarteira}/despesas/{idDespesa}")
+    @PutMapping("/{idCarteira}/despesas/{idDespesa}")
     public ResponseEntity<DespesaUpdateDTO> editarDespesa(@PathVariable Long idCarteira, @PathVariable Long idDespesa, @RequestBody DespesaUpdateDTO dto) {
         Despesa despesa = despesaService.editarDespesa(idCarteira, idDespesa, dto);
 
@@ -115,25 +115,25 @@ public class CarteiraController {
         return ResponseEntity.ok(despesaUpdateDTO);
     }
 
-    @DeleteMapping("carteiras/{idCarteira}")
+    @DeleteMapping("/{idCarteira}")
     public ResponseEntity<?> desativarCarteira(@PathVariable Long idCarteira) {
         carteiraService.desativarCarteira(idCarteira);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("carteiras/{idCarteira}/receitas/{idReceita}")
+    @DeleteMapping("/{idCarteira}/receitas/{idReceita}")
     public ResponseEntity<Void> desativarReceita(@PathVariable Long idCarteira, @PathVariable Long idReceita) {
         receitaService.desativarReceita(idCarteira, idReceita);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("carteiras/{idCarteira}/despesas/{idDespesa}")
+    @DeleteMapping("/{idCarteira}/despesas/{idDespesa}")
     public ResponseEntity<Void> desativarDespesa(@PathVariable Long idCarteira, @PathVariable Long idDespesa) {
         despesaService.desativarDespesa(idCarteira, idDespesa);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("carteiras/{idCarteira}/reativar")
+    @PutMapping("/{idCarteira}/reativar")
     public ResponseEntity<CarteiraResponseDTO> reativarCarteira(@PathVariable Long idCarteira) {
         carteiraService.reativarCarteira(idCarteira);
 
@@ -152,7 +152,7 @@ public class CarteiraController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("carteiras/{idCarteira}/receitas/{idReceita}/reativar")
+    @PutMapping("/{idCarteira}/receitas/{idReceita}/reativar")
     public ResponseEntity<ReceitaResponseDTO> reativarReceita(@PathVariable Long idCarteira, @PathVariable Long idReceita){
         Receita receita = receitaService.reativarReceita(idCarteira, idReceita);
 
@@ -166,7 +166,7 @@ public class CarteiraController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("carteiras/{idCarteira}/despesa/{idDespesa}/reativar")
+    @PutMapping("/{idCarteira}/despesas/{idDespesa}/reativar")
     public ResponseEntity<DespesaResponseDTO> reativarDespesa(@PathVariable Long idCarteira, @PathVariable Long idDespesa) {
         Despesa despesa = despesaService.reativarDespesa(idCarteira, idDespesa);
 
@@ -179,7 +179,7 @@ public class CarteiraController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("carteiras/usuarios/{idUsuario}/nome")
+    @PutMapping("/usuarios/{idUsuario}/nome")
     public ResponseEntity<UsuarioUpdateDTO> editarNome(@PathVariable Long idUsuario, @RequestBody UsuarioUpdateDTO nomeDto) {
         Usuario usuarioAtualizado = usuarioService.editarNome(idUsuario, nomeDto.getNome());
 
