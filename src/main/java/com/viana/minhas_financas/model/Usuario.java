@@ -14,8 +14,11 @@ public class Usuario {
     private String nome;
 
     @NotNull(message = "O e-mail não pode ser nulo.")
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private  String senha;
     
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Carteira carteira;
@@ -47,10 +50,6 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public Carteira getCarteira() {
-        return carteira;
-    }
-
     public void setCarteira(Carteira carteira) {
         this.carteira = carteira;
     }
@@ -61,6 +60,18 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public Carteira getCarteira() {
+        return carteira;
     }
 
     public Boolean getUsuarioAtivo() {

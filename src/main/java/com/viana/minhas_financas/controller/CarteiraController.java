@@ -29,9 +29,6 @@ public class CarteiraController {
     @Autowired
     private DespesaService despesaService;
 
-    @Autowired
-    UsuarioService usuarioService;
-
     @PostMapping
     public ResponseEntity<CarteiraResponseDTO> criarCarteira(@RequestBody CarteiraRequestDTO dto) {
         Carteira carteira = carteiraService.criarCarteira(dto);
@@ -179,13 +176,4 @@ public class CarteiraController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/usuarios/{idUsuario}/nome")
-    public ResponseEntity<UsuarioUpdateDTO> editarNome(@PathVariable Long idUsuario, @RequestBody UsuarioUpdateDTO nomeDto) {
-        Usuario usuarioAtualizado = usuarioService.editarNome(idUsuario, nomeDto.getNome());
-
-        UsuarioUpdateDTO response = new UsuarioUpdateDTO();
-        response.setNome(usuarioAtualizado.getNome());
-
-        return ResponseEntity.ok(response);
-    }
 }
