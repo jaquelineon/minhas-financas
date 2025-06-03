@@ -1,5 +1,6 @@
 package com.viana.minhas_financas.model;
 
+import com.viana.minhas_financas.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,6 +20,10 @@ public class Usuario {
 
     @Column(nullable = false)
     private  String senha;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
     
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Carteira carteira;
@@ -68,6 +73,14 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Carteira getCarteira() {

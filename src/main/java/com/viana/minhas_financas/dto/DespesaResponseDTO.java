@@ -1,6 +1,6 @@
 package com.viana.minhas_financas.dto;
 
-import com.viana.minhas_financas.model.Categoria;
+import com.viana.minhas_financas.enums.Categoria;
 import com.viana.minhas_financas.model.Despesa;
 
 import java.math.BigDecimal;

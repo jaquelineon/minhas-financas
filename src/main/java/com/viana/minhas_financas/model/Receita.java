@@ -1,5 +1,6 @@
 package com.viana.minhas_financas.model;
 
+import com.viana.minhas_financas.enums.Categoria;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 

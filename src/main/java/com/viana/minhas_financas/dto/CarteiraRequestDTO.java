@@ -6,6 +6,7 @@ public class CarteiraRequestDTO {
     private Long idCarteira;
     private String nome;
     private String email;
+    private String senha;
     private BigDecimal saldoCarteira;
 
     public Long getIdCarteira() {
@@ -30,6 +31,14 @@ public class CarteiraRequestDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public BigDecimal getSaldoCarteira() {
