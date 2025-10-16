@@ -38,10 +38,7 @@ public class DespesaService {
 
         salvarDespesa(novaDespesa);
 
-        BigDecimal saldoAtual = carteira.getSaldoCarteira() != null ? carteira.getSaldoCarteira() : BigDecimal.ZERO;
-        BigDecimal novoSaldo = saldoAtual.subtract(novaDespesa.getValorDespesa());
-        carteira.setSaldoCarteira(novoSaldo);
-
+        carteiraService.atualizarSaldo(carteira);
         carteiraService.salvarCarteira(carteira);
 
         return novaDespesa;
@@ -64,10 +61,19 @@ public class DespesaService {
                 despesa.setDescricaoDespesa(dto.getDescricaoDespesa());
             }
 
+        // Mantém a referência da carteira
         despesa.setCarteira(carteira);
+
+        // Salva a despesa primeiro
+        Despesa despesaAtualizada = salvarDespesa(despesa);
+
+        // Atualiza o saldo da carteira com base nas receitas e despesas atuais
+        carteiraService.atualizarSaldo(carteira);
+
+        // Salva a carteira atualizada
         carteiraService.salvarCarteira(carteira);
 
-        return salvarDespesa(despesa);
+        return despesaAtualizada;
     }
 
     public void desativarDespesa(Long idCarteira, Long idDespesa) {
@@ -85,7 +91,7 @@ public class DespesaService {
         salvarDespesa(despesa);
 
         Carteira carteira = carteiraService.buscarCarteira(idCarteira);
-        carteira.setSaldoCarteira(carteira.getSaldoCarteira().add(despesa.getValorDespesa()));
+        carteiraService.atualizarSaldo(carteira);
         carteiraService.salvarCarteira(carteira);
     }
 
@@ -100,7 +106,7 @@ public class DespesaService {
         salvarDespesa(despesa);
 
         Carteira carteira = carteiraService.buscarCarteira(idCarteira);
-        carteira.setSaldoCarteira(carteira.getSaldoCarteira().subtract(despesa.getValorDespesa()));
+        carteiraService.atualizarSaldo(carteira);
         carteiraService.salvarCarteira(carteira);
 
         return despesa;

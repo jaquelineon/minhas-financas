@@ -27,23 +27,21 @@ public class ReceitaService {
         return receitaRepository.save(receita);
     }
 
-    public Receita adicionarReceita(Long idCarteira, ReceitaRequestDTO dto) {
-        Carteira carteira = carteiraService.buscarCarteira(idCarteira);
-        Receita novaReceita = new Receita();
-        novaReceita.setValorReceita(dto.getValorReceita());
-        novaReceita.setCategoriaReceita(dto.getCategoriaReceita());
-        novaReceita.setDescricaoReceita(dto.getDescricaoReceita());
-        novaReceita.setCarteira(carteira);
-        novaReceita.setReceitaAtiva(true);
+        public Receita adicionarReceita(Long idCarteira, ReceitaRequestDTO dto) {
+            Carteira carteira = carteiraService.buscarCarteira(idCarteira);
+            Receita novaReceita = new Receita();
+            novaReceita.setValorReceita(dto.getValorReceita());
+            novaReceita.setCategoriaReceita(dto.getCategoriaReceita());
+            novaReceita.setDescricaoReceita(dto.getDescricaoReceita());
+            novaReceita.setCarteira(carteira);
+            novaReceita.setReceitaAtiva(true);
 
-        salvarReceita(novaReceita);
+            salvarReceita(novaReceita);
+            carteiraService.atualizarSaldo(carteira);
+            carteiraService.salvarCarteira(carteira);
 
-        BigDecimal saldoAtual = carteira.getSaldoCarteira() != null ? carteira.getSaldoCarteira() : BigDecimal.ZERO;
-        carteira.setSaldoCarteira(saldoAtual.add(novaReceita.getValorReceita()));
-        carteiraService.salvarCarteira(carteira);
-
-        return novaReceita;
-    }
+            return novaReceita;
+        }
 
     public Receita editarReceita(Long idCarteira, Long idReceita, ReceitaUpdateDTO dto) {
         Carteira carteira = carteiraService.buscarCarteira(idCarteira);
@@ -63,10 +61,19 @@ public class ReceitaService {
                 receita.setDescricaoReceita(dto.getDescricaoReceita());
             }
 
+        // Mantém a referência da carteira
         receita.setCarteira(carteira);
+
+        // Salva a receita primeiro
+        Receita receitaAtualizada = salvarReceita(receita);
+
+        // Atualiza o saldo da carteira com base nas receitas e despesas atuais
+        carteiraService.atualizarSaldo(carteira);
+
+        // Salva a carteira atualizada
         carteiraService.salvarCarteira(carteira);
 
-        return salvarReceita(receita);
+        return receitaAtualizada;
     }
 
     public void desativarReceita(Long idCarteira, Long idReceita) {
@@ -84,7 +91,7 @@ public class ReceitaService {
         salvarReceita(receita);
 
         Carteira carteira = carteiraService.buscarCarteira(idCarteira);
-        carteira.setSaldoCarteira(carteira.getSaldoCarteira().subtract(receita.getValorReceita()));
+        carteiraService.atualizarSaldo(carteira);
         carteiraService.salvarCarteira(carteira);
     }
 
@@ -98,7 +105,7 @@ public class ReceitaService {
         salvarReceita(receita);
 
         Carteira carteira = carteiraService.buscarCarteira(idCarteira);
-        carteira.setSaldoCarteira(carteira.getSaldoCarteira().add(receita.getValorReceita()));
+        carteiraService.atualizarSaldo(carteira);
         carteiraService.salvarCarteira(carteira);
         return receita;
     }

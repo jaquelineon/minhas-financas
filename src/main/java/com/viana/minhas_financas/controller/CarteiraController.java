@@ -39,7 +39,7 @@ public class CarteiraController {
         response.setNomeUsuario(carteira.getUsuario().getNome());
         response.setEmailUsuario(carteira.getUsuario().getEmail());
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
@@ -87,7 +87,7 @@ public class CarteiraController {
         response.setDescricaoDespesa(despesa.getDescricaoDespesa());
         response.setIdCarteira(despesa.getCarteira().getIdCarteira());
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{idCarteira}/receitas/{idReceita}")
@@ -169,11 +169,11 @@ public class CarteiraController {
 
         DespesaResponseDTO response = new DespesaResponseDTO();
         response.setIdCarteira(despesa.getCarteira().getIdCarteira());
+        response.setIdDespesa(despesa.getIdDespesa());
         response.setValorDespesa(despesa.getValorDespesa());
         response.setCategoriaDespesa(despesa.getCategoriaDespesa());
         response.setDescricaoDespesa(despesa.getDescricaoDespesa());
 
         return ResponseEntity.ok(response);
     }
-
 }

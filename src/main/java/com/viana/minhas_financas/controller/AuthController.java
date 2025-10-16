@@ -1,7 +1,7 @@
 package com.viana.minhas_financas.controller;
 
-import com.viana.minhas_financas.dto.LoginRequest;
-import com.viana.minhas_financas.dto.TokenResponse;
+import com.viana.minhas_financas.dto.LoginRequestDTO;
+import com.viana.minhas_financas.dto.TokenResponseDTO;
 import com.viana.minhas_financas.model.Usuario;
 import com.viana.minhas_financas.repository.UsuarioRepository;
 import com.viana.minhas_financas.service.JwtService;
@@ -28,7 +28,7 @@ public class AuthController {
     BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(loginRequest.email());
 
         if (usuarioOpt.isEmpty()) {
@@ -43,6 +43,6 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha inválida");
         }
         String token = jwtService.gerarToken(usuario.getEmail(), usuario.getRole());
-        return ResponseEntity.ok(new TokenResponse(token));
+        return ResponseEntity.ok(new TokenResponseDTO(token));
     }
 }
